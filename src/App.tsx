@@ -1,5 +1,11 @@
+import generatePassword from './logic/generatePassword';
+
 function App() {
-  return <></>;
+  return (
+    <>
+      <span>{generatePassword()}</span>
+    </>
+  );
 }
 
 export default App;
