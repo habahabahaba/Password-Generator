@@ -22,14 +22,7 @@ export default function generatePassword(
 ): string {
   console.log(JSON.stringify(options, null, 2));
 
-  const {
-    passwordLength,
-    hasLowerCase,
-    hasUpperCase,
-    hasNumbers,
-    hasSpecial,
-    nonAmbiguous,
-  } = options;
+  const { passwordLength, nonAmbiguous } = options;
 
   // Characters by types:
   const LOWERCASE_CHARS = 'abcdefghijklmnopqrstuvwxyz';
@@ -41,46 +34,41 @@ export default function generatePassword(
     ? '!@#$%^&*()-_=+[{]}\\;:\'",<.>/?`~'
     : '!@#$%^&*()-_=+[{]}\\|;:\'",<.>/?`~'; // if nonAmbiguous option is selected, remove "|", so it won't be confused with "I".
 
-  // If no character types are provided:
-  if (!(hasLowerCase || hasUpperCase || hasNumbers || hasSpecial)) return '';
+  // passwordChars will hold all the characters for the password, grouped by a character type. (The sequence of characters will be randomized later.)
+  const passwordChars: string[] = new Array<string>(passwordLength);
 
-  // Calculate number of characters of each type:
+  // Determine, which character types are to be used in the password according to the options argument:
 
-  // Determine which character types are to be used in the password:
+  // We filter the options argument for character types, while calculating the total number of used types:
   let usedCharTypesNumber = 4;
-
-  const optionsKeys = Object.keys(options) as (keyof PasswordOptions)[]; // TS BS
-  let charTypeLengths: number[] = optionsKeys
-    .filter((key) => key !== 'passwordLength' && key !== 'nonAmbiguous') // "passwordLength" and "nonAmbiguous" are not a char type
-    .map((key) => {
-      if (options[key] === true) return 1; // characters of this type should be in the password
-      // decrease the number of used character types:
-      usedCharTypesNumber--;
-      return 0;
+  const usedCharTypes: boolean[] = Object.entries(options)
+    .filter(([key]) => key !== 'passwordLength' && key !== 'nonAmbiguous') // "passwordLength" and "nonAmbiguous" are not character types.
+    .map(([, value]) => {
+      if (!value) {
+        // Decrease the total number of character types.
+        usedCharTypesNumber--;
+      }
+      return value;
     });
+  console.log('usedCharTypes: ', usedCharTypes);
 
-  // In order to maintain high randomness, we generate a unique random number between 1 and passwordLength - 1 FOR EACH used character type BUT the first one, which is set to 0.
+  // SAFE-GUARDS:
+  // If no character types are provided:
+  if (!usedCharTypesNumber) return '';
+  // If password does not have enough length to include characters of all selected types:
+  if (passwordLength < usedCharTypesNumber) return '';
 
-  const charTypeBorders = [0].concat(
+  // In order to maintain high randomness, we generate a unique random starting indicies in the passwordChars array for groups of characters of each used type. The FIRST starting index is set to 0.
+  const charTypeStarts = [0].concat(
     uniqueRandomsInRange(usedCharTypesNumber - 1, 1, passwordLength - 1)
-      // We sort the resulted array of numbers (charTypeBorders) in the ascending order.
+      // We sort the resulted array of random numbers (charTypeStarts) in the ascending order to prevent character groups from overlapping:
       .sort((a, b) => a - b)
   );
-  console.log('borders: ', charTypeBorders);
+  console.log('charTypeStarts: ', charTypeStarts);
 
-  let bordersIdx: number = 0;
-  charTypeLengths = charTypeLengths.map((typeLength) => {
-    if (!typeLength) return 0; // if this character type is unused
+  // Populate he passwordChars array:
 
-    // The difference between the two adjacent numbers from charTypeBorders will become a quantity of characters of a respective type (typeLength).
-    const charTypeLength =
-      (charTypeBorders[bordersIdx + 1] ?? passwordLength) -
-      charTypeBorders[bordersIdx++];
-
-    return charTypeLength;
-  });
-  console.log('charTypeLengths: ', charTypeLengths);
-
+  // The array of all characters grouped by type and in order, in which they appear in the options argument:
   const charStrings = [
     LOWERCASE_CHARS,
     UPPERCASE_CHARS,
@@ -88,27 +76,44 @@ export default function generatePassword(
     SPECIAL_CHARS,
   ];
 
-  const passwordChars: string[] = [];
+  // startsIdx will be used for traversing through the charTypeStarts array, while populating the passwordChars array:
+  let startsIdx: number = 0;
 
-  charStrings.forEach((charString, idx) => {
-    for (let i = 0; i < charTypeLengths[idx]; i++) {
-      // Push a random character of a respective type into the passwordChars array:
-      passwordChars.push(charString[randomInRange(0, charString.length - 1)]);
+  // Traverse through the usedCharTypes array and populate the passwordChars array with the characters of used types according to starting indicies (from charTypeStarts) for groups of each respective type:
+  for (let i = 0; i < usedCharTypes.length; i++) {
+    if (!usedCharTypes[i]) continue; // if character type is unused
+    const charString = charStrings[i]; // the string, that consists of all characters of a respective type
+
+    // The starting index for the characters of a CURRENT used type inside the passwordChars array:
+    const groupStart = charTypeStarts[startsIdx];
+    // The starting index for the characters of a NEXT used type inside the passwordChars array:
+    const nextGroupStart =
+      charTypeStarts[startsIdx + 1] ?? passwordChars.length;
+
+    // Go through the segment of the passwordChars array, that is allocated for the characters of respective type:
+    for (let j = groupStart; j < nextGroupStart; j++) {
+      // pick a random character from the charString:
+      const randomChar = charString[randomInRange(0, charString.length - 1)];
+      // Place the randomChar in the passwordChars at the apropriate index:
+      passwordChars[j] = randomChar;
     }
-  });
+
+    startsIdx++; // go to the starting index of a next group;
+  }
+
   console.log('passwordChars: ', passwordChars);
 
   // Randomise the sequence of characters in the password:
-  const passwordCharsIndicies: number[] = uniqueRandomsInRange(
+  const passwordCharsSequence: number[] = uniqueRandomsInRange(
     passwordLength,
     0,
     passwordLength - 1
   );
 
-  console.log('passwordCharsIndicies: ', passwordCharsIndicies);
+  console.log('passwordCharsSequence: ', passwordCharsSequence);
 
   // Assemble the password:
-  const password = passwordCharsIndicies
+  const password = passwordCharsSequence
     .map((idx) => passwordChars[idx])
     .join('');
 
