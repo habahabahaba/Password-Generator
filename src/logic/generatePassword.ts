@@ -7,8 +7,15 @@ export interface PasswordOptions {
   hasSpecial: boolean;
   nonAmbiguous: boolean;
 }
+export type passwordOptionsKeys =
+  | 'passwordLength'
+  | 'hasLowerCase'
+  | 'hasUpperCase'
+  | 'hasNumbers'
+  | 'hasSpecial'
+  | 'nonAmbiguous';
 
-const defaultPasswordOptions: PasswordOptions = {
+export const defaultPasswordOptions: PasswordOptions = {
   passwordLength: 8,
   hasLowerCase: true,
   hasUpperCase: true,
@@ -39,13 +46,14 @@ export default function generatePassword(
 
   // Determine, which character types are to be used in the password according to the options argument:
 
-  // We filter the options argument for character types, while calculating the total number of used types:
+  // We filter the options argument for character types, while maintaining their order and calculating the total number of used types:
   let usedCharTypesNumber = 4;
   const usedCharTypes: boolean[] = Object.entries(options)
     .filter(([key]) => key !== 'passwordLength' && key !== 'nonAmbiguous') // "passwordLength" and "nonAmbiguous" are not character types.
     .map(([, value]) => {
       if (!value) {
-        // Decrease the total number of character types.
+        // if the character type is set to false in the options argument
+        // Decrease the total number of character types:
         usedCharTypesNumber--;
       }
       return value;
@@ -58,7 +66,7 @@ export default function generatePassword(
   // If password does not have enough length to include characters of all selected types:
   if (passwordLength < usedCharTypesNumber) return '';
 
-  // In order to maintain high randomness, we generate a unique random starting indicies in the passwordChars array for groups of characters of each used type. The FIRST starting index is set to 0.
+  // We generate a unique random starting indicies in the passwordChars array for groups of characters of each used type. The FIRST starting index is set to 0.
   const charTypeStarts = [0].concat(
     uniqueRandomsInRange(usedCharTypesNumber - 1, 1, passwordLength - 1)
       // We sort the resulted array of random numbers (charTypeStarts) in the ascending order to prevent character groups from overlapping:
@@ -94,7 +102,7 @@ export default function generatePassword(
     for (let j = groupStart; j < nextGroupStart; j++) {
       // pick a random character from the charString:
       const randomChar = charString[randomInRange(0, charString.length - 1)];
-      // Place the randomChar in the passwordChars at the apropriate index:
+      // Place the randomChar in the passwordChars at the appropriate index:
       passwordChars[j] = randomChar;
     }
 
@@ -120,17 +128,22 @@ export default function generatePassword(
   return password;
 }
 
+// Returns a random integer from a provided range.
 function randomInRange(min: number, max: number): number {
   return min + Math.floor(Math.random() * (max - min + 1));
 }
 
+// Returns an array of unique random integers from a provided range.
 function uniqueRandomsInRange(
-  quantity: number,
+  quantity: number, // how many numbers should the function return
   min: number,
   max: number
 ): number[] {
+  // Normalizing the min-max range, so that the minimum possible number will always be zero:
   const normalizedMax = max - min + 1;
 
+  // SAFE-GUARD:
+  // If provided range is not big enough for a provided quantity of unique numbers:
   if (quantity > normalizedMax || quantity <= 0) return [];
 
   const numbers = new Set<number>();
@@ -138,11 +151,16 @@ function uniqueRandomsInRange(
   let num: number;
   for (let i = 0; i < quantity; i++) {
     num = randomInRange(0, normalizedMax);
+
     while (numbers.has(num % normalizedMax)) {
-      num++;
+      // // If the number has been generated before, pick the next number:
+      // num++;
+      // If the number has been generated before, generate a new number:
+      num = randomInRange(0, normalizedMax);
     }
     numbers.add(num % normalizedMax);
   }
 
+  // Denormalizing generated numbers:
   return [...numbers].map((num) => num + min);
 }
