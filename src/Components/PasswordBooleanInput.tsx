@@ -16,6 +16,8 @@ interface PasswordBooleanInputProps {
   optionName: passwordOptionsKeys;
   value: boolean;
   handler: (optionName: passwordOptionsKeys, value: boolean) => void;
+  disabled?: boolean;
+  highlighted?: boolean;
 }
 
 const PasswordBooleanInput: FC<PasswordBooleanInputProps> = ({
@@ -23,23 +25,24 @@ const PasswordBooleanInput: FC<PasswordBooleanInputProps> = ({
   optionName,
   value,
   handler,
+  disabled = false,
+  highlighted = false,
 }) => {
   // JSX:
   return (
-    <>
-      <label htmlFor={optionName} className='flex gap-2 items-center'>
-        <input
-          id={optionName}
-          type='checkbox'
-          checked={value}
-          onChange={(event) => {
-            handler(optionName, event.target.checked);
-          }}
-          className='w-4 h-4'
-        />
-        {label}
-      </label>
-    </>
+    <label htmlFor={optionName} className='flex gap-2 items-center'>
+      <input
+        id={optionName}
+        type='checkbox'
+        checked={value}
+        onChange={(event) => {
+          handler(optionName, event.target.checked);
+        }}
+        disabled={disabled}
+        className={`w-4 h-4 ${highlighted ? 'border-2 border-red-600' : ''}`}
+      />
+      {label}
+    </label>
   );
 };
 
