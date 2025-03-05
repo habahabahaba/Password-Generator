@@ -1,6 +1,7 @@
 // Logic:
-import generatePassword from './logic/generatePassword';
-import { defaultPasswordOptions } from './logic/generatePassword';
+import generatePassword, {
+  defaultPasswordOptions,
+} from './logic/generatePassword';
 // React:
 import { useState, useEffect, useRef } from 'react';
 // Components:
@@ -9,6 +10,7 @@ import PasswordAlert from './Components/PasswordAlert';
 // Icons:
 import copyIcon from './assets/copy-icon.svg';
 import generateIcon from './assets/circle-arrow-icon.svg';
+
 // Types, interfaces and enumns:
 import type {
   PasswordOptions,
@@ -30,6 +32,7 @@ const initError: Errors = {
   clipboard: null,
 };
 
+// Component:
 function App() {
   // State:
   const [passwordOptions, setPasswordOptions] = useState<PasswordOptions>(
@@ -86,7 +89,9 @@ function App() {
   function autocorrectCharacterTypes(): void {
     const { hasLowerCase, hasUpperCase, hasNumbers, hasSpecial } =
       passwordOptions;
+    // If no character types are selected
     if (!hasLowerCase && !hasUpperCase && !hasNumbers && !hasSpecial) {
+      // Autocorrect the password from having no character types to having lowercase characters:
       setPasswordOptions((state) => ({
         ...state,
         hasLowerCase: true,
@@ -117,10 +122,8 @@ function App() {
       false;
   }
 
-  // handleCharacterTypesBlur fires the autocorrectCharacterTypes if the focus travels outside the character types form while none character types are selected:
+  // handleCharacterTypesBlur fires the autocorrectCharacterTypes if the focus travels outside the character types checkboxes or labels, while none of character types are selected:
   function handleCharacterTypesBlur(): void {
-    // console.log('[newFocusTarget] isClickInside:', isClickInside);
-    // setTimeout(() => {
     const newFocusTarget = document.activeElement;
     if (
       !isClickInside &&
@@ -129,7 +132,6 @@ function App() {
     ) {
       autocorrectCharacterTypes();
     }
-    // }, 0);
   }
 
   function handleGeneratePassword(): void {
@@ -255,7 +257,7 @@ function App() {
           )}
           {checkboxes}
         </div>
-        <div className='flex  gap-3 w-full'>
+        <div className='flex  gap-1 w-full'>
           <button
             className='border-2 border-gray-600 rounded px-1 bg-gray-200 opacity-80 hover:opacity-100 disabled:opacity-40  active:bg-gray-300'
             onClick={handleGeneratePassword}
