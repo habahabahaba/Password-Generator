@@ -215,7 +215,7 @@ function App() {
           {error.passwordLength ? (
             <PasswordAlert isError text={error.passwordLength} />
           ) : (
-            'Password length:'
+            <span className='text-lg'>Password length:</span>
           )}
           <div
             className={`flex gap-3 place-items-stretch   py-1 px-2 border-2 rounded-md ${
@@ -232,7 +232,6 @@ function App() {
                 setOption('passwordLength', +event.target.value);
               }}
               onBlur={autocorrectPasswordLength}
-              // onPointerLeave={autocorrectPasswordLength}
               className='w-11 border-2 rounded pl-1 bg-white'
             />
             <input
@@ -252,11 +251,11 @@ function App() {
           {error.charTypes ? (
             <PasswordAlert isError text={error.charTypes} />
           ) : (
-            <span> Character types:</span>
+            <span className='text-lg'> Character types:</span>
           )}
           {checkboxes}
         </div>
-        <div className='flex  gap-3 justify-between w-full'>
+        <div className='flex  gap-3 w-full'>
           <button
             className='border-2 border-gray-600 rounded px-1 bg-gray-200 opacity-80 hover:opacity-100 disabled:opacity-40  active:bg-gray-300'
             onClick={handleGeneratePassword}
@@ -268,7 +267,7 @@ function App() {
               className='w-5 py-1'
             />
           </button>
-          <div className='my-1'>
+          <div className='mt-1 mx-auto'>
             <PasswordAlert
               text={error.clipboard ? error.clipboard : message}
               isError={!!error.clipboard}
