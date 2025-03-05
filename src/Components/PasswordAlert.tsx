@@ -17,7 +17,7 @@ interface PasswordAlertProps {
 const PasswordAlert: FC<PasswordAlertProps> = ({ text, isError = false }) => {
   // JSX:
   return (
-    <div className='h-3 my-0.5  '>
+    <div className='h-3  mb-3 '>
       {text ? (
         <span
           className={`bg-white px-1 py-0.5 border-1 ${

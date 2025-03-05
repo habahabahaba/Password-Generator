@@ -108,20 +108,23 @@ function App() {
   }
 
   // For autocorrectCharacterTypes (and to prevent two character types to be selected on one click during the autocorrecting):
-  let isClickInside = false; // to filter out the clicks outside the character types form
   const characterTypesRef = useRef<HTMLInputElement | null>(null);
+  let isClickInside = false; // to filter out the clicks outside the character types form
   function handleMouseDown(event: React.MouseEvent<HTMLDivElement>) {
     isClickInside =
-      characterTypesRef.current?.contains(event.target as Node) ?? false;
+      (characterTypesRef.current?.contains(event.target as Node) &&
+        characterTypesRef.current !== event.target) ??
+      false;
   }
 
   // handleCharacterTypesBlur fires the autocorrectCharacterTypes if the focus travels outside the character types form while none character types are selected:
   function handleCharacterTypesBlur(): void {
+    // console.log('[newFocusTarget] isClickInside:', isClickInside);
     // setTimeout(() => {
     const newFocusTarget = document.activeElement;
     if (
-      characterTypesRef.current &&
       !isClickInside &&
+      characterTypesRef.current &&
       !characterTypesRef.current.contains(newFocusTarget)
     ) {
       autocorrectCharacterTypes();
@@ -162,7 +165,7 @@ function App() {
   const checkboxes = (
     <div className='w-fit mb-1'>
       <div
-        className={`grid grid-cols-2 gap-y-2 gap-x-24  mb-1 py-1 px-2 pr-14 border-2 rounded-md ${
+        className={`grid grid-cols-2 gap-y-2 gap-x-24 box-border my-1 py-1 pl-2 pr-14 border-2 rounded-md ${
           error.charTypes ? ' border-red-600' : 'border-transparent'
         }`}
         ref={characterTypesRef}
@@ -207,9 +210,13 @@ function App() {
 
   return (
     <div className='flex flex-col gap-2 w-fit'>
-      <div className='flex flex-col gap-2 items-start bg-gray-100 rounded-xl p-2'>
+      <div className='flex flex-col gap-2 items-start bg-gray-100 rounded-xl py-2 px-2'>
         <label htmlFor='passwordLength' className='flex flex-col gap-1'>
-          Password length:
+          {error.passwordLength ? (
+            <PasswordAlert isError text={error.passwordLength} />
+          ) : (
+            'Password length:'
+          )}
           <div
             className={`flex gap-3 place-items-stretch   py-1 px-2 border-2 rounded-md ${
               error.passwordLength ? ' border-red-600' : 'border-transparent'
@@ -225,6 +232,7 @@ function App() {
                 setOption('passwordLength', +event.target.value);
               }}
               onBlur={autocorrectPasswordLength}
+              // onPointerLeave={autocorrectPasswordLength}
               className='w-11 border-2 rounded pl-1 bg-white'
             />
             <input
@@ -239,11 +247,14 @@ function App() {
             />
           </div>
         </label>
-        <PasswordAlert isError text={error.passwordLength} />
-        <div className='mt-1 mb-2 w-full'>
-          <span> Character types:</span>
+
+        <div className='flex flex-col mt-1 mb-2 w-full'>
+          {error.charTypes ? (
+            <PasswordAlert isError text={error.charTypes} />
+          ) : (
+            <span> Character types:</span>
+          )}
           {checkboxes}
-          <PasswordAlert isError text={error.charTypes} />
         </div>
         <div className='flex  gap-3 justify-between w-full'>
           <button
@@ -257,7 +268,7 @@ function App() {
               className='w-5 py-1'
             />
           </button>
-          <div className='mt-0.5'>
+          <div className='my-1'>
             <PasswordAlert
               text={error.clipboard ? error.clipboard : message}
               isError={!!error.clipboard}
@@ -271,7 +282,7 @@ function App() {
           onChange={(event) => {
             handlePasswordChange(event.target.value);
           }}
-          className='min-w-80 border-2 rounded px-1 bg-white text-nowrap text-sm'
+          className='min-w-82 border-2 rounded px-1 bg-white text-nowrap text-sm'
         />
         <button
           className='border-2 border-gray-600 rounded px-1 bg-gray-200 opacity-80 hover:opacity-100 disabled:opacity-40 active:bg-gray-300'
