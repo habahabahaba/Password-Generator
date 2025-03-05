@@ -21,7 +21,7 @@ const PasswordAlert: FC<PasswordAlertProps> = ({ text, isError = false }) => {
       {text ? (
         <span
           className={`bg-white px-1 py-0.5 border-1 hover:cursor-default text-md ${
-            isError ? 'border-black text-red-600' : ''
+            isError ? 'border-black text-red-600' : 'text-blue-800'
           }`}
         >
           {text}

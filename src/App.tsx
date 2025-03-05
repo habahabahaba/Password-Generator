@@ -212,7 +212,7 @@ function App() {
 
   return (
     <div className='flex flex-col gap-2 w-fit'>
-      <div className='flex flex-col gap-2 items-start bg-gray-100 rounded-xl py-2 px-2'>
+      <div className='flex flex-col gap-2 items-start bg-gray-100 rounded-xl pt-2 pb-2 px-2'>
         <label htmlFor='passwordLength' className='flex flex-col gap-1'>
           {error.passwordLength ? (
             <PasswordAlert isError text={error.passwordLength} />
