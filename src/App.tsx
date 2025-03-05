@@ -1,3 +1,4 @@
+// Logic:
 import generatePassword from './logic/generatePassword';
 import { defaultPasswordOptions } from './logic/generatePassword';
 // React:
@@ -38,8 +39,6 @@ function App() {
   const [message, setMessage] = useState<Messages>(null);
   const [error, setError] = useState<Errors>(initError);
 
-  const numInputRef = useRef<HTMLInputElement | null>(null);
-
   // Validation:
   useEffect(
     function validate(): () => void {
@@ -75,6 +74,26 @@ function App() {
     [passwordOptions]
   );
 
+  // Autocorrecting:
+  function autocorrectPasswordLength(): void {
+    // Autocorrect the password length to the range of [8, 32]:
+    setPasswordOptions((state) => ({
+      ...state,
+      passwordLength: Math.min(32, Math.max(8, state.passwordLength)),
+    }));
+  }
+
+  function autocorrectCharacterTypes(): void {
+    const { hasLowerCase, hasUpperCase, hasNumbers, hasSpecial } =
+      passwordOptions;
+    if (!hasLowerCase && !hasUpperCase && !hasNumbers && !hasSpecial) {
+      setPasswordOptions((state) => ({
+        ...state,
+        hasLowerCase: true,
+      }));
+    }
+  }
+
   // Handlers:
   function setOption(
     optionName: passwordOptionsKeys,
@@ -86,26 +105,28 @@ function App() {
     } else {
       setPasswordOptions((state) => ({ ...state, [optionName]: !!value }));
     }
-    // validate();
   }
 
-  function cooptPasswordLength(): void {
-    // Coopt the password length to the range of [8, 32]:
-    setPasswordOptions((state) => ({
-      ...state,
-      passwordLength: Math.min(32, Math.max(8, state.passwordLength)),
-    }));
+  // For autocorrectCharacterTypes (and to prevent two character types to be selected on one click during the autocorrecting):
+  let isClickInside = false; // to filter out the clicks outside the character types form
+  const characterTypesRef = useRef<HTMLInputElement | null>(null);
+  function handleMouseDown(event: React.MouseEvent<HTMLDivElement>) {
+    isClickInside =
+      characterTypesRef.current?.contains(event.target as Node) ?? false;
   }
 
-  function cooptCharacterTypes(): void {
-    const { hasLowerCase, hasUpperCase, hasNumbers, hasSpecial } =
-      passwordOptions;
-    if (!hasLowerCase && !hasUpperCase && !hasNumbers && !hasSpecial) {
-      setPasswordOptions((state) => ({
-        ...state,
-        hasLowerCase: true,
-      }));
+  // handleCharacterTypesBlur fires the autocorrectCharacterTypes if the focus travels outside the character types form while none character types are selected:
+  function handleCharacterTypesBlur(): void {
+    // setTimeout(() => {
+    const newFocusTarget = document.activeElement;
+    if (
+      characterTypesRef.current &&
+      !isClickInside &&
+      !characterTypesRef.current.contains(newFocusTarget)
+    ) {
+      autocorrectCharacterTypes();
     }
+    // }, 0);
   }
 
   function handleGeneratePassword(): void {
@@ -144,7 +165,9 @@ function App() {
         className={`grid grid-cols-2 gap-y-2 gap-x-24  mb-1 py-1 px-2 pr-14 border-2 rounded-md ${
           error.charTypes ? ' border-red-600' : 'border-transparent'
         }`}
-        // onBlur={cooptCharacterTypes}
+        ref={characterTypesRef}
+        onBlur={handleCharacterTypesBlur}
+        onMouseDown={handleMouseDown}
       >
         <PasswordBooleanInput
           label='a-z'
@@ -184,7 +207,7 @@ function App() {
 
   return (
     <div className='flex flex-col gap-2 w-fit'>
-      <div className='flex flex-col gap-2 items-start bg-gray-100 rounded-xl p-3 '>
+      <div className='flex flex-col gap-2 items-start bg-gray-100 rounded-xl p-2'>
         <label htmlFor='passwordLength' className='flex flex-col gap-1'>
           Password length:
           <div
@@ -197,12 +220,11 @@ function App() {
               type='number'
               min={8}
               max={32}
-              ref={numInputRef}
               value={passwordOptions.passwordLength}
               onChange={(event) => {
                 setOption('passwordLength', +event.target.value);
               }}
-              onBlur={cooptPasswordLength}
+              onBlur={autocorrectPasswordLength}
               className='w-11 border-2 rounded pl-1 bg-white'
             />
             <input
@@ -223,9 +245,9 @@ function App() {
           {checkboxes}
           <PasswordAlert isError text={error.charTypes} />
         </div>
-        <div className='flex  gap-3 '>
+        <div className='flex  gap-3 justify-between w-full'>
           <button
-            className='border-2 border-gray-600 rounded px-1 bg-gray-200 opacity-80 hover:opacity-100 disabled:opacity-50  active:bg-gray-300'
+            className='border-2 border-gray-600 rounded px-1 bg-gray-200 opacity-80 hover:opacity-100 disabled:opacity-40  active:bg-gray-300'
             onClick={handleGeneratePassword}
             disabled={!!error.passwordLength || !!error.charTypes}
           >
@@ -249,10 +271,10 @@ function App() {
           onChange={(event) => {
             handlePasswordChange(event.target.value);
           }}
-          className='min-w-90 border-2 rounded px-1 bg-white'
+          className='min-w-80 border-2 rounded px-1 bg-white text-nowrap text-sm'
         />
         <button
-          className='border-2 border-gray-600 rounded px-1 bg-gray-200 opacity-80 hover:opacity-100 disabled:opacity-50 active:bg-gray-300'
+          className='border-2 border-gray-600 rounded px-1 bg-gray-200 opacity-80 hover:opacity-100 disabled:opacity-40 active:bg-gray-300'
           onClick={copyToClipboard}
           disabled={!password}
         >

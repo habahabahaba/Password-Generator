@@ -16,7 +16,7 @@ export type passwordOptionsKeys =
   | 'nonAmbiguous';
 
 export const defaultPasswordOptions: PasswordOptions = {
-  passwordLength: 8,
+  passwordLength: 12,
   hasLowerCase: true,
   hasUpperCase: true,
   hasNumbers: true,
