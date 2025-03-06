@@ -261,7 +261,7 @@ function App() {
         </div>
         <div className="flex w-full gap-1">
           <button
-            className="h-8 w-8 rounded border-2 border-gray-800 bg-gray-200 opacity-80 hover:opacity-100 active:bg-gray-300 disabled:opacity-40 dark:border-gray-400 dark:bg-gray-800 dark:text-gray-100 dark:active:bg-gray-700"
+            className="h-8 w-8 rounded border-2 border-gray-800 bg-gray-200 opacity-80 hover:opacity-100 active:bg-gray-300 disabled:opacity-40 dark:border-gray-400 dark:bg-gray-600 dark:text-gray-100 dark:active:bg-gray-700"
             onClick={handleGeneratePassword}
             disabled={!!error.passwordLength || !!error.charTypes}
           >
@@ -288,7 +288,7 @@ function App() {
           className="min-w-82 rounded border-2 bg-white px-1 text-sm text-nowrap dark:border-gray-400 dark:bg-gray-700 dark:text-gray-50"
         />
         <button
-          className="h-8 w-8 rounded border-2 border-gray-800 bg-gray-200 opacity-80 hover:opacity-100 active:bg-gray-300 disabled:opacity-40 dark:border-gray-400 dark:bg-gray-800 dark:text-gray-100 dark:active:bg-gray-700"
+          className="h-8 w-8 rounded border-2 border-gray-800 bg-gray-200 opacity-80 hover:opacity-100 active:bg-gray-300 disabled:opacity-40 dark:border-gray-400 dark:bg-gray-600 dark:text-gray-100 dark:active:bg-gray-700"
           onClick={copyToClipboard}
           disabled={!password}
         >
