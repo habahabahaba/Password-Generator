@@ -1,30 +1,30 @@
 // Logic:
 import generatePassword, {
   defaultPasswordOptions,
-} from './logic/generatePassword';
+} from "./logic/generatePassword";
 // React:
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 // Components:
-import PasswordBooleanInput from './Components/PasswordBooleanInput';
-import PasswordAlert from './Components/PasswordAlert';
+import PasswordBooleanInput from "./Components/PasswordBooleanInput";
+import PasswordAlert from "./Components/PasswordAlert";
 // Icons:
-import copyIcon from './assets/copy-icon.svg';
-import generateIcon from './assets/circle-arrow-icon.svg';
+import copyIcon from "./assets/copy-icon.svg";
+import generateIcon from "./assets/circle-arrow-icon.svg";
 
 // Types, interfaces and enumns:
 import type {
   PasswordOptions,
   passwordOptionsKeys,
-} from './logic/generatePassword';
+} from "./logic/generatePassword";
 type Errors = {
   passwordLength:
     | null
-    | 'The minimum password length is 8'
-    | 'The maximum password length is 32';
-  charTypes: null | 'At least one character type has to be selected';
-  clipboard: null | 'Failed to copy the password!';
+    | "The minimum password length is 8"
+    | "The maximum password length is 32";
+  charTypes: null | "At least one character type has to be selected";
+  clipboard: null | "Failed to copy the password!";
 };
-type Messages = null | 'The password was copied to the clipboard';
+type Messages = null | "The password was copied to the clipboard";
 
 const initError: Errors = {
   passwordLength: null,
@@ -36,9 +36,9 @@ const initError: Errors = {
 function App() {
   // State:
   const [passwordOptions, setPasswordOptions] = useState<PasswordOptions>(
-    defaultPasswordOptions
+    defaultPasswordOptions,
   );
-  const [password, setPassword] = useState<string>('');
+  const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<Messages>(null);
   const [error, setError] = useState<Errors>(initError);
 
@@ -55,18 +55,18 @@ function App() {
       if (passwordLength < 8) {
         setError((state) => ({
           ...state,
-          passwordLength: 'The minimum password length is 8',
+          passwordLength: "The minimum password length is 8",
         }));
       } else if (passwordLength > 32) {
         setError((state) => ({
           ...state,
-          passwordLength: 'The maximum password length is 32',
+          passwordLength: "The maximum password length is 32",
         }));
       }
       if (!hasLowerCase && !hasUpperCase && !hasNumbers && !hasSpecial) {
         setError((state) => ({
           ...state,
-          charTypes: 'At least one character type has to be selected',
+          charTypes: "At least one character type has to be selected",
         }));
       }
 
@@ -74,7 +74,7 @@ function App() {
         setError(() => initError);
       };
     },
-    [passwordOptions]
+    [passwordOptions],
   );
 
   // Autocorrecting:
@@ -102,10 +102,10 @@ function App() {
   // Handlers:
   function setOption(
     optionName: passwordOptionsKeys,
-    value: number | boolean
+    value: number | boolean,
   ): void {
     // resetFeedback();
-    if (optionName === 'passwordLength') {
+    if (optionName === "passwordLength") {
       setPasswordOptions((state) => ({ ...state, passwordLength: +value }));
     } else {
       setPasswordOptions((state) => ({ ...state, [optionName]: !!value }));
@@ -153,56 +153,56 @@ function App() {
       // };
 
       await navigator.clipboard.writeText(password);
-      setMessage(() => 'The password was copied to the clipboard');
+      setMessage(() => "The password was copied to the clipboard");
     } catch (err) {
       setError((state) => ({
         ...state,
-        clipboard: 'Failed to copy the password!',
+        clipboard: "Failed to copy the password!",
       }));
-      console.error('Failed to copy: ', err);
+      console.error("Failed to copy: ", err);
     }
   }
 
   // JSX:
   const checkboxes = (
-    <div className='w-fit mb-1'>
+    <div className="mb-1 w-fit">
       <div
-        className={`grid grid-cols-2 gap-y-2 gap-x-24 box-border my-1 py-1 pl-2 pr-14 border-2 rounded-md ${
-          error.charTypes ? ' border-red-600' : 'border-transparent'
+        className={`my-1 box-border grid grid-cols-2 gap-x-24 gap-y-2 rounded-md border-2 py-1 pr-14 pl-2 ${
+          error.charTypes ? "border-red-600" : "border-transparent"
         }`}
         ref={characterTypesRef}
         onBlur={handleCharacterTypesBlur}
         onMouseDown={handleMouseDown}
       >
         <PasswordBooleanInput
-          label='a-z'
-          optionName='hasLowerCase'
+          label="a-z"
+          optionName="hasLowerCase"
           value={passwordOptions.hasLowerCase}
           handler={setOption}
         />
         <PasswordBooleanInput
-          label='A-Z'
-          optionName='hasUpperCase'
+          label="A-Z"
+          optionName="hasUpperCase"
           value={passwordOptions.hasUpperCase}
           handler={setOption}
         />
         <PasswordBooleanInput
-          label='0-9'
-          optionName='hasNumbers'
+          label="0-9"
+          optionName="hasNumbers"
           value={passwordOptions.hasNumbers}
           handler={setOption}
         />
         <PasswordBooleanInput
-          label='!@#$%^'
-          optionName='hasSpecial'
+          label="!@#$%^"
+          optionName="hasSpecial"
           value={passwordOptions.hasSpecial}
           handler={setOption}
         />
       </div>
-      <div className='px-1'>
+      <div className="px-1">
         <PasswordBooleanInput
-          label='Avoid ambiguous characters'
-          optionName='nonAmbiguous'
+          label="Avoid ambiguous characters"
+          optionName="nonAmbiguous"
           value={passwordOptions.nonAmbiguous}
           handler={setOption}
         />
@@ -211,65 +211,65 @@ function App() {
   );
 
   return (
-    <div className='flex flex-col gap-2 w-fit'>
-      <div className='flex flex-col gap-2 items-start bg-gray-100 rounded-xl pt-2 pb-2 px-2'>
-        <label htmlFor='passwordLength' className='flex flex-col gap-1'>
+    <div className="flex w-fit flex-col gap-2">
+      <div className="flex flex-col items-start gap-2 rounded-xl bg-gray-100 px-2 pt-2 pb-2">
+        <label htmlFor="passwordLength" className="flex flex-col gap-1">
           {error.passwordLength ? (
             <PasswordAlert isError text={error.passwordLength} />
           ) : (
-            <span className='text-lg'>Password length:</span>
+            <span className="text-lg">Password length:</span>
           )}
           <div
-            className={`flex gap-3 place-items-stretch   py-1 px-2 border-2 rounded-md ${
-              error.passwordLength ? ' border-red-600' : 'border-transparent'
+            className={`flex place-items-stretch gap-3 rounded-md border-2 px-2 py-1 ${
+              error.passwordLength ? "border-red-600" : "border-transparent"
             }`}
           >
             <input
-              id='passwordLength'
-              type='number'
+              id="passwordLength"
+              type="number"
               min={8}
               max={32}
               value={passwordOptions.passwordLength}
               onChange={(event) => {
-                setOption('passwordLength', +event.target.value);
+                setOption("passwordLength", +event.target.value);
               }}
               onBlur={autocorrectPasswordLength}
-              className='w-11 border-2 rounded pl-1 bg-white'
+              className="w-11 rounded border-2 bg-white pl-1"
             />
             <input
-              type='range'
+              type="range"
               min={8}
               max={32}
               value={passwordOptions.passwordLength}
               onChange={(event) => {
-                setOption('passwordLength', +event.target.value);
+                setOption("passwordLength", +event.target.value);
               }}
-              className='w-65'
+              className="w-65"
             />
           </div>
         </label>
 
-        <div className='flex flex-col mt-1 mb-2 w-full'>
+        <div className="mt-1 mb-2 flex w-full flex-col">
           {error.charTypes ? (
             <PasswordAlert isError text={error.charTypes} />
           ) : (
-            <span className='text-lg'> Character types:</span>
+            <span className="text-lg"> Character types:</span>
           )}
           {checkboxes}
         </div>
-        <div className='flex  gap-1 w-full'>
+        <div className="flex w-full gap-1">
           <button
-            className='border-2 border-gray-600 rounded px-1 bg-gray-200 opacity-80 hover:opacity-100 disabled:opacity-40  active:bg-gray-300'
+            className="rounded border-2 border-gray-600 bg-gray-200 px-1 opacity-80 hover:opacity-100 active:bg-gray-300 disabled:opacity-40"
             onClick={handleGeneratePassword}
             disabled={!!error.passwordLength || !!error.charTypes}
           >
             <img
               src={generateIcon}
-              alt='generate password'
-              className='w-5 py-1'
+              alt="generate password"
+              className="w-5 py-1"
             />
           </button>
-          <div className='mt-1 mx-auto'>
+          <div className="mx-auto mt-1">
             <PasswordAlert
               text={error.clipboard ? error.clipboard : message}
               isError={!!error.clipboard}
@@ -277,20 +277,20 @@ function App() {
           </div>
         </div>
       </div>
-      <div className='flex justify-around gap-2 bg-gray-100 rounded-xl p-2'>
+      <div className="flex justify-around gap-2 rounded-xl bg-gray-100 p-2">
         <input
           value={password}
           onChange={(event) => {
             handlePasswordChange(event.target.value);
           }}
-          className='min-w-82 border-2 rounded px-1 bg-white text-nowrap text-sm'
+          className="min-w-82 rounded border-2 bg-white px-1 text-sm text-nowrap"
         />
         <button
-          className='border-2 border-gray-600 rounded px-1 bg-gray-200 opacity-80 hover:opacity-100 disabled:opacity-40 active:bg-gray-300'
+          className="rounded border-2 border-gray-600 bg-gray-200 px-1 opacity-80 hover:opacity-100 active:bg-gray-300 disabled:opacity-40"
           onClick={copyToClipboard}
           disabled={!password}
         >
-          <img src={copyIcon} alt='copy password' className='w-5 py-1' />
+          <img src={copyIcon} alt="copy password" className="w-5 py-1" />
         </button>
       </div>
     </div>
