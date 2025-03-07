@@ -24,7 +24,7 @@ const PasswordAlert: FC<PasswordAlertProps> = ({ text, isError = false }) => {
             isError
               ? 'border-black text-red-600 dark:border-red-500 dark:text-red-500'
               : 'text-indigo-800 dark:border-indigo-300 dark:text-indigo-300'
-          } dark:bg-neutral-900`}
+          } dark:bg-zinc-900`}
         >
           {text}
         </span>

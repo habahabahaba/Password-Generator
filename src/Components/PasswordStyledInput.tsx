@@ -20,7 +20,7 @@ const PasswordStyledInput: FC<PasswordStyledInputProps> = ({
   // JSX:
   return (
     <input
-      className={`${tailwindClass} rounded border-0 bg-white outline-0 dark:bg-zinc-600 dark:accent-indigo-400 dark:focus:ring-2 dark:focus:ring-indigo-400`}
+      className={`${tailwindClass} rounded border-0 bg-white outline-0 dark:bg-zinc-600 dark:accent-indigo-400 dark:selection:bg-indigo-500 dark:focus:ring-2 dark:focus:ring-indigo-400`}
       {...rest}
     />
   );
