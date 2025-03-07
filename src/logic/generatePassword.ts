@@ -25,7 +25,7 @@ export const defaultPasswordOptions: PasswordOptions = {
 };
 
 export default function generatePassword(
-  options: PasswordOptions = defaultPasswordOptions
+  options: PasswordOptions = defaultPasswordOptions,
 ): string {
   console.log(JSON.stringify(options, null, 2));
 
@@ -70,7 +70,7 @@ export default function generatePassword(
   const charTypeStarts = [0].concat(
     uniqueRandomsInRange(usedCharTypesNumber - 1, 1, passwordLength - 1)
       // We sort the resulted array of random numbers (charTypeStarts) in the ascending order to prevent character groups from overlapping:
-      .sort((a, b) => a - b)
+      .sort((a, b) => a - b),
   );
   console.log('charTypeStarts: ', charTypeStarts);
 
@@ -115,7 +115,7 @@ export default function generatePassword(
   const passwordCharsSequence: number[] = uniqueRandomsInRange(
     passwordLength,
     0,
-    passwordLength - 1
+    passwordLength - 1,
   );
 
   console.log('passwordCharsSequence: ', passwordCharsSequence);
@@ -137,7 +137,7 @@ function randomInRange(min: number, max: number): number {
 function uniqueRandomsInRange(
   quantity: number, // how many numbers should the function return
   min: number,
-  max: number
+  max: number,
 ): number[] {
   // Normalizing the min-max range, so that the minimum possible number will always be zero:
   const normalizedMax = max - min + 1;
@@ -152,13 +152,13 @@ function uniqueRandomsInRange(
   for (let i = 0; i < quantity; i++) {
     num = randomInRange(0, normalizedMax);
 
-    while (numbers.has(num % normalizedMax)) {
+    while (numbers.has(num)) {
       // // If the number has been generated before, pick the next number:
       // num++;
       // If the number has been generated before, generate a new number:
       num = randomInRange(0, normalizedMax);
     }
-    numbers.add(num % normalizedMax);
+    numbers.add(num);
   }
 
   // Denormalizing generated numbers:
