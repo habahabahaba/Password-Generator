@@ -9,6 +9,7 @@ import PasswordBooleanInput from './Components/PasswordBooleanInput';
 import PasswordAlert from './Components/PasswordAlert';
 import GeneratePasswordButton from './Components/GeneratePasswordButton';
 import CopyPasswordButton from './Components/CopyPasswordButton';
+import PasswordStyledInput from './Components/PasswordStyledInput';
 
 // Types, interfaces and enumns:
 import type {
@@ -225,7 +226,7 @@ function App() {
               error.passwordLength ? 'border-red-600' : 'border-transparent'
             }`}
           >
-            <input
+            <PasswordStyledInput
               id="passwordLength"
               type="number"
               min={8}
@@ -235,7 +236,7 @@ function App() {
                 setOption('passwordLength', +event.target.value);
               }}
               onBlur={autocorrectPasswordLength}
-              className="w-11 rounded border-0 bg-white pl-1 outline-0 dark:bg-zinc-600 dark:accent-indigo-400 dark:focus:ring-2 dark:focus:ring-indigo-400"
+              tailwindClass="w-11 pl-1"
             />
             <input
               type="range"
@@ -272,12 +273,12 @@ function App() {
         </div>
       </div>
       <div className="flex justify-around gap-2 rounded-md bg-slate-200 p-2 dark:bg-zinc-800 dark:text-gray-50">
-        <input
+        <PasswordStyledInput
           value={password}
           onChange={(event) => {
             handlePasswordChange(event.target.value);
           }}
-          className="min-w-82 rounded border-0 bg-white px-1 text-sm text-nowrap outline-0 dark:bg-zinc-600 dark:accent-indigo-400 dark:focus:ring-2 dark:focus:ring-indigo-400"
+          tailwindClass="min-w-82 px-1 text-sm text-nowrap"
         />
         <CopyPasswordButton
           onClick={handleCopyToClipboard}
