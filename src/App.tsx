@@ -1,30 +1,30 @@
 // Logic:
 import generatePassword, {
   defaultPasswordOptions,
-} from './logic/generatePassword';
+} from "./logic/generatePassword";
 // React:
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 // Components:
-import PasswordBooleanInput from './Components/PasswordBooleanInput';
-import PasswordAlert from './Components/PasswordAlert';
-import GeneratePasswordButton from './Components/GeneratePasswordButton';
-import CopyPasswordButton from './Components/CopyPasswordButton';
-import PasswordStyledInput from './Components/PasswordStyledInput';
+import PasswordBooleanInput from "./Components/PasswordBooleanInput";
+import PasswordAlert from "./Components/PasswordAlert";
+import GeneratePasswordButton from "./Components/GeneratePasswordButton";
+import CopyPasswordButton from "./Components/CopyPasswordButton";
+import PasswordStyledInput from "./Components/PasswordStyledInput";
 
 // Types, interfaces and enumns:
 import type {
   PasswordOptions,
   passwordOptionsKeys,
-} from './logic/generatePassword';
+} from "./logic/generatePassword";
 type Errors = {
   passwordLength:
     | null
-    | 'The minimum password length is 8'
-    | 'The maximum password length is 32';
-  charTypes: null | 'At least one character type has to be selected';
-  clipboard: null | 'Failed to copy the password!';
+    | "The minimum password length is 8"
+    | "The maximum password length is 32";
+  charTypes: null | "At least one character type has to be selected";
+  clipboard: null | "Failed to copy the password!";
 };
-type Messages = null | 'The password was copied to the clipboard';
+type Messages = null | "The password was copied to the clipboard";
 
 const initError: Errors = {
   passwordLength: null,
@@ -38,7 +38,7 @@ function App() {
   const [passwordOptions, setPasswordOptions] = useState<PasswordOptions>(
     defaultPasswordOptions,
   );
-  const [password, setPassword] = useState<string>('');
+  const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<Messages>(null);
   const [error, setError] = useState<Errors>(initError);
 
@@ -55,18 +55,18 @@ function App() {
       if (passwordLength < 8) {
         setError((state) => ({
           ...state,
-          passwordLength: 'The minimum password length is 8',
+          passwordLength: "The minimum password length is 8",
         }));
       } else if (passwordLength > 32) {
         setError((state) => ({
           ...state,
-          passwordLength: 'The maximum password length is 32',
+          passwordLength: "The maximum password length is 32",
         }));
       }
       if (!hasLowerCase && !hasUpperCase && !hasNumbers && !hasSpecial) {
         setError((state) => ({
           ...state,
-          charTypes: 'At least one character type has to be selected',
+          charTypes: "At least one character type has to be selected",
         }));
       }
 
@@ -105,7 +105,7 @@ function App() {
     value: number | boolean,
   ): void {
     // resetFeedback();
-    if (optionName === 'passwordLength') {
+    if (optionName === "passwordLength") {
       setPasswordOptions((state) => ({ ...state, passwordLength: +value }));
     } else {
       setPasswordOptions((state) => ({ ...state, [optionName]: !!value }));
@@ -119,7 +119,7 @@ function App() {
     isClickInside =
       (characterTypesRef.current?.contains(event.target as Node) &&
         characterTypesRef.current !== event.target) ??
-      false;
+      false; // filer-out checkboxes and labels, but not their parent element
   }
 
   // handleCharacterTypesBlur fires the autocorrectCharacterTypes if the focus travels outside the character types checkboxes or labels, while none of character types are selected:
@@ -153,13 +153,13 @@ function App() {
       // };
 
       await navigator.clipboard.writeText(password);
-      setMessage(() => 'The password was copied to the clipboard');
+      setMessage(() => "The password was copied to the clipboard");
     } catch (err) {
       setError((state) => ({
         ...state,
-        clipboard: 'Failed to copy the password!',
+        clipboard: "Failed to copy the password!",
       }));
-      console.error('Failed to copy: ', err);
+      console.error("Failed to copy: ", err);
     }
   }
 
@@ -169,8 +169,8 @@ function App() {
       <div
         className={`my-1 box-border grid grid-cols-2 gap-x-24 gap-y-2 rounded-md border-2 py-1 pr-14 pl-2 ${
           error.charTypes
-            ? 'border-red-600 dark:border-red-500'
-            : 'border-transparent'
+            ? "border-red-600 dark:border-red-500"
+            : "border-transparent"
         }`}
         ref={characterTypesRef}
         onBlur={handleCharacterTypesBlur}
@@ -223,7 +223,7 @@ function App() {
           )}
           <div
             className={`flex place-items-stretch gap-3 rounded-md border-2 p-2 ${
-              error.passwordLength ? 'border-red-600' : 'border-transparent'
+              error.passwordLength ? "border-red-600" : "border-transparent"
             }`}
           >
             <PasswordStyledInput
@@ -233,7 +233,7 @@ function App() {
               max={32}
               value={passwordOptions.passwordLength}
               onChange={(event) => {
-                setOption('passwordLength', +event.target.value);
+                setOption("passwordLength", +event.target.value);
               }}
               onBlur={autocorrectPasswordLength}
               tailwindClass="w-11 pl-1"
@@ -244,7 +244,7 @@ function App() {
               max={32}
               value={passwordOptions.passwordLength}
               onChange={(event) => {
-                setOption('passwordLength', +event.target.value);
+                setOption("passwordLength", +event.target.value);
               }}
               className="w-65 dark:accent-indigo-400"
             />
@@ -259,6 +259,7 @@ function App() {
           )}
           {checkboxes}
         </div>
+
         <div className="flex w-full gap-1">
           <GeneratePasswordButton
             onClick={handleGeneratePassword}
@@ -272,6 +273,7 @@ function App() {
           </div>
         </div>
       </div>
+
       <div className="flex justify-around gap-2 rounded-md bg-slate-200 p-2 dark:bg-zinc-800 dark:text-gray-50">
         <PasswordStyledInput
           value={password}
