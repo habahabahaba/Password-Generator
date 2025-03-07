@@ -39,7 +39,7 @@ const PasswordBooleanInput: FC<PasswordBooleanInputProps> = ({
           handler(optionName, event.target.checked);
         }}
         disabled={disabled}
-        className={`h-4 w-4 ${highlighted ? 'border-2 border-red-600' : ''} dark:accent-indigo-400`}
+        className={`h-4 w-4 ${highlighted ? 'border-2 border-red-600' : ''}dark:accent-indigo-400 `}
       />
       {label}
     </label>
