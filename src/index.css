@@ -1,12 +1,5 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 :root {
   margin: 2.5%;
 }
-
-@theme {
-  --color-button: rgb(2, 117, 255);
-}
-/* @media (prefers-color-scheme: dark) {
-  --color-background: rgb(21, 25, 27);
-} */
