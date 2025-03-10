@@ -30,7 +30,10 @@ const PasswordBooleanInput: FC<PasswordBooleanInputProps> = ({
 }) => {
   // JSX:
   return (
-    <label htmlFor={optionName} className='flex items-center gap-2'>
+    <label
+      htmlFor={optionName}
+      className='flex items-center gap-2 hover:cursor-pointer'
+    >
       <input
         id={optionName}
         type='checkbox'
@@ -39,7 +42,7 @@ const PasswordBooleanInput: FC<PasswordBooleanInputProps> = ({
           handler(optionName, event.target.checked);
         }}
         disabled={disabled}
-        className={`h-4 w-4 hover:cursor-pointer ${highlighted ? "border-2 border-red-600" : ""} dark:bg-zinc-700 dark:accent-indigo-500 dark:ring-indigo-500 dark:not-checked:appearance-none dark:not-checked:rounded-xs dark:hover:accent-zinc-500`}
+        className={`h-4 w-4 hover:cursor-pointer ${highlighted ? "border-2 border-red-600" : ""} dark:border-2 dark:border-zinc-500 dark:bg-zinc-600 dark:accent-indigo-500 dark:ring-indigo-500 dark:not-checked:appearance-none dark:not-checked:rounded-xs dark:hover:accent-indigo-300`}
       />
       {label}
     </label>
