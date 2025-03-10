@@ -213,7 +213,7 @@ function App() {
   );
 
   return (
-    <div className='flex w-fit flex-col gap-2 dark:text-gray-100 dark:selection:bg-indigo-400'>
+    <div className='flex w-fit flex-col gap-1.5 dark:text-gray-100 dark:selection:bg-indigo-400'>
       <div className='flex flex-col items-start gap-2 rounded-md bg-slate-200 p-2 dark:bg-zinc-800'>
         <label htmlFor='passwordLength' className='flex flex-col gap-1'>
           {error.passwordLength ? (
