@@ -8,8 +8,8 @@
 // Components:
 // CSS:
 // Types, interfaces and enumns:
-import type { FC } from 'react';
-import type { passwordOptionsKeys } from '../logic/generatePassword';
+import type { FC } from "react";
+import type { passwordOptionsKeys } from "../logic/generatePassword";
 
 interface PasswordBooleanInputProps {
   label: string;
@@ -30,16 +30,16 @@ const PasswordBooleanInput: FC<PasswordBooleanInputProps> = ({
 }) => {
   // JSX:
   return (
-    <label htmlFor={optionName} className="flex items-center gap-2">
+    <label htmlFor={optionName} className='flex items-center gap-2'>
       <input
         id={optionName}
-        type="checkbox"
+        type='checkbox'
         checked={value}
         onChange={(event) => {
           handler(optionName, event.target.checked);
         }}
         disabled={disabled}
-        className={`h-4 w-4 ${highlighted ? 'border-2 border-red-600' : ''}dark:accent-indigo-400 `}
+        className={`h-4 w-4 ${highlighted ? "border-2 border-red-600" : ""}dark:accent-indigo-500 dark:hover:accent-indigo-500`}
       />
       {label}
     </label>

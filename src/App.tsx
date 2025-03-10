@@ -165,7 +165,7 @@ function App() {
 
   // JSX:
   const checkboxes = (
-    <div className="mb-1 w-fit">
+    <div className='mb-1 w-fit'>
       <div
         className={`my-1 box-border grid grid-cols-2 gap-x-24 gap-y-2 rounded-md border-2 py-1 pr-14 pl-2 ${
           error.charTypes
@@ -177,34 +177,34 @@ function App() {
         onMouseDown={handleMouseDown}
       >
         <PasswordBooleanInput
-          label="a-z"
-          optionName="hasLowerCase"
+          label='a-z'
+          optionName='hasLowerCase'
           value={passwordOptions.hasLowerCase}
           handler={setOption}
         />
         <PasswordBooleanInput
-          label="A-Z"
-          optionName="hasUpperCase"
+          label='A-Z'
+          optionName='hasUpperCase'
           value={passwordOptions.hasUpperCase}
           handler={setOption}
         />
         <PasswordBooleanInput
-          label="0-9"
-          optionName="hasNumbers"
+          label='0-9'
+          optionName='hasNumbers'
           value={passwordOptions.hasNumbers}
           handler={setOption}
         />
         <PasswordBooleanInput
-          label="!@#$%^"
-          optionName="hasSpecial"
+          label='!@#$%^'
+          optionName='hasSpecial'
           value={passwordOptions.hasSpecial}
           handler={setOption}
         />
       </div>
-      <div className="px-1">
+      <div className='px-1'>
         <PasswordBooleanInput
-          label="Avoid ambiguous characters"
-          optionName="nonAmbiguous"
+          label='Avoid ambiguous characters'
+          optionName='nonAmbiguous'
           value={passwordOptions.nonAmbiguous}
           handler={setOption}
         />
@@ -213,13 +213,13 @@ function App() {
   );
 
   return (
-    <div className="flex w-fit flex-col gap-2 dark:text-gray-100 dark:selection:bg-indigo-400">
-      <div className="flex flex-col items-start gap-2 rounded-md bg-slate-200 p-2 dark:bg-zinc-800">
-        <label htmlFor="passwordLength" className="flex flex-col gap-1">
+    <div className='flex w-fit flex-col gap-2 dark:text-gray-100 dark:selection:bg-indigo-400'>
+      <div className='flex flex-col items-start gap-2 rounded-md bg-slate-200 p-2 dark:bg-zinc-800'>
+        <label htmlFor='passwordLength' className='flex flex-col gap-1'>
           {error.passwordLength ? (
             <PasswordAlert isError text={error.passwordLength} />
           ) : (
-            <span className="text-lg">Password length:</span>
+            <span className='text-lg'>Password length:</span>
           )}
           <div
             className={`flex place-items-stretch gap-3 rounded-md border-2 p-2 ${
@@ -227,8 +227,8 @@ function App() {
             }`}
           >
             <PasswordStyledInput
-              id="passwordLength"
-              type="number"
+              id='passwordLength'
+              type='number'
               min={8}
               max={32}
               value={passwordOptions.passwordLength}
@@ -236,36 +236,36 @@ function App() {
                 setOption("passwordLength", +event.target.value);
               }}
               onBlur={autocorrectPasswordLength}
-              tailwindClass="w-11 pl-1"
+              tailwindClass='w-11 pl-1'
             />
             <input
-              type="range"
+              type='range'
               min={8}
               max={32}
               value={passwordOptions.passwordLength}
               onChange={(event) => {
                 setOption("passwordLength", +event.target.value);
               }}
-              className="w-65 dark:accent-indigo-400"
+              className='w-65 dark:accent-indigo-400'
             />
           </div>
         </label>
 
-        <div className="mt-1 mb-2 flex w-full flex-col">
+        <div className='mt-1 mb-2 flex w-full flex-col'>
           {error.charTypes ? (
             <PasswordAlert isError text={error.charTypes} />
           ) : (
-            <span className="text-lg"> Character types:</span>
+            <span className='text-lg'> Character types:</span>
           )}
           {checkboxes}
         </div>
 
-        <div className="flex w-full gap-1">
+        <div className='flex w-full gap-1'>
           <GeneratePasswordButton
             onClick={handleGeneratePassword}
             isDisabled={!!error.passwordLength || !!error.charTypes}
           />
-          <div className="mx-auto mt-1">
+          <div className='mx-auto mt-1'>
             <PasswordAlert
               text={error.clipboard ? error.clipboard : message}
               isError={!!error.clipboard}
@@ -274,13 +274,13 @@ function App() {
         </div>
       </div>
 
-      <div className="flex justify-around gap-2 rounded-md bg-slate-200 p-2 dark:bg-zinc-800 dark:text-gray-50">
+      <div className='flex justify-around gap-2 rounded-md bg-slate-200 p-2 dark:bg-zinc-800 dark:text-gray-50'>
         <PasswordStyledInput
           value={password}
           onChange={(event) => {
             handlePasswordChange(event.target.value);
           }}
-          tailwindClass="min-w-82 px-1 text-sm text-nowrap"
+          tailwindClass='min-w-82 px-1 text-sm text-nowrap'
         />
         <CopyPasswordButton
           onClick={handleCopyToClipboard}
