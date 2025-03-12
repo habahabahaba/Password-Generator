@@ -8,12 +8,12 @@ export interface PasswordOptions {
   nonAmbiguous: boolean;
 }
 export type passwordOptionsKeys =
-  | 'passwordLength'
-  | 'hasLowerCase'
-  | 'hasUpperCase'
-  | 'hasNumbers'
-  | 'hasSpecial'
-  | 'nonAmbiguous';
+  | "passwordLength"
+  | "hasLowerCase"
+  | "hasUpperCase"
+  | "hasNumbers"
+  | "hasSpecial"
+  | "nonAmbiguous";
 
 export const defaultPasswordOptions: PasswordOptions = {
   passwordLength: 12,
@@ -32,14 +32,14 @@ export default function generatePassword(
   const { passwordLength, nonAmbiguous } = options;
 
   // Characters by types:
-  const LOWERCASE_CHARS = 'abcdefghijklmnopqrstuvwxyz';
+  const LOWERCASE_CHARS = "abcdefghijklmnopqrstuvwxyz";
   const UPPERCASE_CHARS = nonAmbiguous
-    ? 'ABCDEFGHIJKLMNPQRSTUVWXYZ'
-    : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // if nonAmbiguous option is selected, remove "O".
-  const NUMBER_CHARS = nonAmbiguous ? '123456789' : '0123456789'; // if nonAmbiguous option is selected, remove "0" (zero).
+    ? "ABCDEFGHIJKLMNPQRSTUVWXYZ"
+    : "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // if nonAmbiguous option is selected, remove "O".
+  const NUMBER_CHARS = nonAmbiguous ? "123456789" : "0123456789"; // if nonAmbiguous option is selected, remove "0" (zero).
   const SPECIAL_CHARS = nonAmbiguous
-    ? '!@#$%^&*()-_=+[{]}\\;:\'",<.>/?`~'
-    : '!@#$%^&*()-_=+[{]}\\|;:\'",<.>/?`~'; // if nonAmbiguous option is selected, remove "|", so it won't be confused with "I".
+    ? "!@#$%^&*()-_=+[{]}\\;:'\",<.>/?`~"
+    : "!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?`~"; // if nonAmbiguous option is selected, remove "|", so it won't be confused with "I".
 
   // passwordChars will hold all the characters for the password, grouped by a character type. (The sequence of characters will be randomized later.)
   const passwordChars: string[] = new Array<string>(passwordLength);
@@ -49,7 +49,7 @@ export default function generatePassword(
   // We filter the options argument for character types, while maintaining their order and calculating the total number of used types:
   let usedCharTypesNumber = 4;
   const usedCharTypes: boolean[] = Object.entries(options)
-    .filter(([key]) => key !== 'passwordLength' && key !== 'nonAmbiguous') // "passwordLength" and "nonAmbiguous" are not character types.
+    .filter(([key]) => key !== "passwordLength" && key !== "nonAmbiguous") // "passwordLength" and "nonAmbiguous" are not character types.
     .map(([, value]) => {
       if (!value) {
         // if the character type is set to false in the options argument
@@ -58,13 +58,13 @@ export default function generatePassword(
       }
       return value;
     });
-  console.log('usedCharTypes: ', usedCharTypes);
+  console.log("usedCharTypes: ", usedCharTypes);
 
   // SAFE-GUARDS:
   // If no character types are provided:
-  if (!usedCharTypesNumber) return '';
+  if (!usedCharTypesNumber) return "";
   // If password does not have enough length to include characters of all selected types:
-  if (passwordLength < usedCharTypesNumber) return '';
+  if (passwordLength < usedCharTypesNumber) return "";
 
   // We generate a unique random starting indicies in the passwordChars array for groups of characters of each used type. The FIRST starting index is set to 0.
   const charTypeStarts = [0].concat(
@@ -72,7 +72,7 @@ export default function generatePassword(
       // We sort the resulted array of random numbers (charTypeStarts) in the ascending order to prevent character groups from overlapping:
       .sort((a, b) => a - b),
   );
-  console.log('charTypeStarts: ', charTypeStarts);
+  console.log("charTypeStarts: ", charTypeStarts);
 
   // Populate he passwordChars array:
 
@@ -109,7 +109,7 @@ export default function generatePassword(
     startsIdx++; // go to the starting index of a next group;
   }
 
-  console.log('passwordChars: ', passwordChars);
+  console.log("passwordChars: ", passwordChars);
 
   // Randomise the sequence of characters in the password:
   const passwordCharsSequence: number[] = uniqueRandomsInRange(
@@ -118,19 +118,19 @@ export default function generatePassword(
     passwordLength - 1,
   );
 
-  console.log('passwordCharsSequence: ', passwordCharsSequence);
+  console.log("passwordCharsSequence: ", passwordCharsSequence);
 
   // Assemble the password:
   const password = passwordCharsSequence
     .map((idx) => passwordChars[idx])
-    .join('');
+    .join("");
 
   return password;
 }
 
 // Returns a random integer from a provided range.
 function randomInRange(min: number, max: number): number {
-  return min + Math.floor(Math.random() * (max - min + 1));
+  return min + Math.floor(Math.random() * (max - min));
 }
 
 // Returns an array of unique random integers from a provided range.

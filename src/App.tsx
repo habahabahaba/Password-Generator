@@ -246,7 +246,7 @@ function App() {
               onChange={(event) => {
                 setOption("passwordLength", +event.target.value);
               }}
-              className='w-65 dark:accent-indigo-400'
+              className='w-65 dark:accent-indigo-400 dark:hover:accent-indigo-300'
             />
           </div>
         </label>
