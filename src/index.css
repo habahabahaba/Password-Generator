@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  margin: 2.5%;
+  @apply m-[2.5%];
+}
+body {
+  @apply bg-white dark:bg-zinc-950;
 }
