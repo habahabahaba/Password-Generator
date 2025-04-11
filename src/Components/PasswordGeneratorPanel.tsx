@@ -159,8 +159,8 @@ const PasswordGeneratorPanel: FC<PasswordGeneratorPanelProps> = ({
     setPassword(() => value);
 
     // Firing onNewPassword subscription:
-    if (onNewPassword && password) {
-      onNewPassword(password, passwordOptions);
+    if (onNewPassword && value) {
+      onNewPassword(value, passwordOptions);
     }
   }
   async function handleCopyToClipboard() {
